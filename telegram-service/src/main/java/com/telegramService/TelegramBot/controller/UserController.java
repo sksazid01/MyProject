@@ -17,6 +17,7 @@ public class UserController {
 
     @PostMapping("/create")
     public String createUser(@RequestBody User user) {
+        // TODO: Use the user creation function of chatbot-service
         return userService.createUser(user);
     }
 }

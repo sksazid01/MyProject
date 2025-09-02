@@ -1,7 +1,11 @@
 spring:
   application:
-    name: TelegramBot
-
+    name: telegram-service
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  
   datasource:
     url: ${DATABASE_URL:}
     username: avnadmin
@@ -14,10 +18,16 @@ spring:
       connection-timeout: 30000 # Wait time for connection (30 sec)
       idle-timeout: 600000      # Remove idle connections after 10 min
       max-lifetime: 1800000     # Recycle connections after 30 min
-    jpa:
-      hibernate:
-        ddl-auto: update    # Auto-creates/updates database tables
-      show-sql: true        # Shows SQL queries in console (debugging)
+  
+  jpa:
+    hibernate:
+      ddl-auto: update    # Auto-creates/updates database tables
+    show-sql: true        # Shows SQL queries in console (debugging)
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
 logging:
   level:
@@ -25,4 +35,4 @@ logging:
     org.hibernate.SQL: DEBUG
 
 server:
-    port: 8081
+  port: 8081
