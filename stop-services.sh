@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
-# filepath: /home/sk-sazid/Desktop/Project/stop-services.sh
 
-echo "Stopping Discovery Service..."
-pkill -f 'spring-boot:run.*discovery-service' || true
+echo "Stopping services..."
 
-echo "Stopping Chatbot Service..."
-pkill -f 'spring-boot:run.*chatbot-service' || true
+# Stop Docker containers if running
+if docker ps --format "table {{.Names}}" | grep -E "(discovery-service|chatbot-service|telegram-service)" >/dev/null 2>&1; then
+    echo "Stopping Docker containers..."
+    docker stop discovery-service chatbot-service telegram-service 2>/dev/null || true
+fi
 
-echo "Stopping Telegram Service..."
-pkill -f 'spring-boot:run.*telegram-service' || true
+# Stop local Maven processes
+echo "Stopping local Maven processes..."
+pkill -f 'spring-boot:run.*discovery-service' 2>/dev/null || true
+pkill -f 'spring-boot:run.*chatbot-service' 2>/dev/null || true
+pkill -f 'spring-boot:run.*telegram-service' 2>/dev/null || true
 
 echo "All services stopped."http://localhost:8761/
