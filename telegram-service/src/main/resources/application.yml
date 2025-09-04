@@ -29,6 +29,10 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
+telegram:
+  MotivaMate_bot:
+    token: ${TELEGRAM_BOT_TOKEN}
+
 logging:
   level:
     com.zaxxer.hikari: DEBUG

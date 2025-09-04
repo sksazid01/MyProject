@@ -7,18 +7,17 @@ cd "$ROOT"
 echo "Building all services..."
 ./mvnw clean install -DskipTests
 
-
 sleep 1
 echo "Starting Discovery Service..."
-gnome-terminal -- bash -c "cd '$ROOT' && ./mvnw spring-boot:run -pl discovery-service; exec bash"
+gnome-terminal -- bash -c "cd \"$ROOT\" && ./mvnw spring-boot:run -pl discovery-service; exec bash"
 
 sleep 1
 echo "Starting Chatbot Service with environment variables..."
-gnome-terminal -- bash -c "cd '$ROOT' && export \$(grep -v '^#' .env | grep -v '^\$' | xargs) && ./mvnw spring-boot:run -pl chatbot-service; exec bash"
+gnome-terminal -- bash -c "cd \"$ROOT\" && export \$(grep -v '^#' .env | grep -v '^\$' | xargs) && ./mvnw spring-boot:run -pl chatbot-service; exec bash"
 
 sleep 1
 echo "Starting Telegram Service with environment variables..."
-gnome-terminal -- bash -c "cd '$ROOT' && export \$(grep -v '^#' .env | grep -v '^\$' | xargs) && ./mvnw spring-boot:run -pl telegram-service; exec bash"
+gnome-terminal -- bash -c "cd \"$ROOT\" && export \$(grep -v '^#' .env | grep -v '^\$' | xargs) && ./mvnw spring-boot:run -pl telegram-service; exec bash"
 
 echo ""
 echo "✅ All services are starting up in separate terminals!"
