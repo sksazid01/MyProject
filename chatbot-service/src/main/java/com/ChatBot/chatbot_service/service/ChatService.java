@@ -25,7 +25,7 @@ public class ChatService {
         private List<Content> conversationHistory = new ArrayList<>();
         
         // Configuration for summarization
-        private static final int RECENT_MESSAGES_LIMIT = 5; // Keep last 5 messages in detail
+        // private static final int RECENT_MESSAGES_LIMIT = 5; // Keep last 5 messages in detail
         private static final int SUMMARIZATION_THRESHOLD = 15; // Start summarizing after 15 messages
 
         @Autowired

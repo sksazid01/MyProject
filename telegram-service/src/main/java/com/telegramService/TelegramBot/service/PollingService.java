@@ -1,5 +1,6 @@
 package com.telegramService.TelegramBot.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telegramService.TelegramBot.config.AppConfig;
@@ -27,8 +28,11 @@ public class PollingService {
     public void init() {
         System.out.println("Telegram Polling Service started...");
     }
+
     @Autowired
     TelegramMessageService telegramMessageService;
+    @Autowired
+    ChatService chatService;
 
     // Run every 2 seconds
     @Scheduled(fixedDelay = 2000)
@@ -45,21 +49,31 @@ public class PollingService {
                     int updateId = update.get("update_id").asInt();
                     JsonNode message = update.get("message");
 
+                    // TODO: call ChatBot service / process user message
                     if (message != null) {
                         long chatId = message.get("chat").get("id").asLong();
                         String text = message.get("text").asText();
 
-                        System.out.println("Received message from chatId=" + chatId + ": " + text);
 
-                        // TODO: call ChatBot service / process user message
-                        telegramMessageService.sendMessage(chatId, "You said: " + text);
+//                        String data = message.get("data").asText();
+
+//                        if (data.equals("ai_friend")) {
+                        telegramMessageService.sendMessage(chatId,"Just a moment, I’m preparing your reply...");
+                        String reply = chatService.generateResponse(text);
+                        if (reply != null) {
+                            telegramMessageService.sendMessage(chatId, reply);
+                        } else {
+                            telegramMessageService.sendMessage(chatId, "Sorry, I couldn't process your request at the moment, please try again.");
+                        }
+
+                        System.out.println("Received message from chatId=" + chatId + ": " + text);
 
                         lastUpdateId = updateId; // update offset
                     }
                 }
             }
-        } catch (Exception e) {
-            System.err.println("Error polling Telegram API: " + e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 }
